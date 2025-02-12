@@ -1,0 +1,29 @@
+CREATE DATABASE IF NOT EXISTS new_bank_management;
+
+USE new_bank_management;
+
+CREATE TABLE IF NOT EXISTS Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    mobile VARCHAR(10) NOT NULL UNIQUE,
+    address TEXT NOT NULL,
+    pincode VARCHAR(6) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Accounts (
+    account_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    account_number VARCHAR(20) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
+    balance DECIMAL(10, 2) DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Transactions (
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    account_id INT NOT NULL,
+    transaction_type ENUM('Deposit', 'Withdraw') NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
+);
